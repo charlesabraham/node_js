@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+  <head>
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+
+
+
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; width: 304px; margin: auto;}
+      form input { border: 0; padding: 10px; width: 80%; margin-right: .5%; }
+      form button { width: 19%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { border:2px dashed; width: 300px; list-style-type: none; margin: auto; padding: 10px; margin-bottom: 9px; margin-top: 11px; }
+      #messages li { padding: 5px 10px; }
+      #messages li.chat:nth-child(even) { background: #eee; }
+	li.system{color: #FF0000;}
+	.middle{width:100%;}
+	
+    </style>
+  </head>
+  <body>
+
+
+<script>
+  var socket = io();
+
+
+$( document ).ready(function() {
+
+  $('.se').click(function(){	
+	    socket.emit('chat message', $('#m').val());
+	    $('#m').val('');
+	    return false;
+  });
+
+
+
+socket.on('chat message', function(msg){
+
+	if(msg)
+	{
+    	$('#messages').append($('<li class="chat">').text(msg));
+	}
+
+  });
+
+
+socket.on('system message', function(msg){
+    $('#messages').append($('<li class="system">').text(msg));
+  });
+
+
+socket.on('counter', function(msg){
+    $('#messages').append($('<li class="counter system">').text(msg));
+  });
+
+});
+</script>
+
+
+
+<div class="middle">
+
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button class="se">&raquo;</button>
+    </form>
+
+</ul>
+
+  </body>
+</html>
